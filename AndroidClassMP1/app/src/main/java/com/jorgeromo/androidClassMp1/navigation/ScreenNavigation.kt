@@ -4,16 +4,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
 
-sealed class ScreenNavigation(val route: String, val label: String, val icon: ImageVector) {
-    object Ids : ScreenNavigation("IdsRoute", "Inicio", Icons.Default.Home)
-    object FirstPartial : ScreenNavigation("FirstPartialRoute", "Parcial 1", Icons.Default.Event)
-    object SecondPartial : ScreenNavigation("SecondPartialRoute", "Parcial 2", Icons.Default.Event)
-    object ThirdPartial : ScreenNavigation("ThirdPartialRoute", "Parcial 3", Icons.Default.Event)
-    object IMC : ScreenNavigation("IMCRoute", "IMC", Icons.Default.Event)
-    object Login : ScreenNavigation("LoginRoute", "Login", Icons.Default.Event)
-    object Sum : ScreenNavigation("SumRoute", "Sum", Icons.Default.Event)
-    object Temperature : ScreenNavigation("TemperatureRoute", "Temperature", Icons.Default.Event)
-    object StudentList : ScreenNavigation("StudentListRoute", "Estudiantes", Icons.Default.People)
-    object Locations : ScreenNavigation("LocationsListRoute", "Location", Icons.Default.People)
+sealed class ScreenNavigation(val route: String, val label: String, val icon: ImageVector? = null) {
 
+    // Tabs principales (usadas en NavigationBar)
+    object Ids : ScreenNavigation("ids", "IDS", Icons.Default.Home)
+    object FirstPartial : ScreenNavigation("first_partial", "1er Parcial", Icons.Default.List)
+    object SecondPartial : ScreenNavigation("second_partial", "2do Parcial", Icons.Default.Star)
+    object ThirdPartial : ScreenNavigation("third_partial", "3er Parcial", Icons.Default.Settings)
+
+    // Rutas internas (pantallas completas independientes)
+    object Login : ScreenNavigation("login", "Login")
+    object Register : ScreenNavigation("register", "Registro")
+    object Home : ScreenNavigation("home", "Home")
+    object IMC : ScreenNavigation("imc", "IMC")
+    object Sum : ScreenNavigation("sum", "Suma")
+    object Temperature : ScreenNavigation("temperature", "Temperatura")
+    object StudentList : ScreenNavigation("students", "Estudiantes")
+    object Locations : ScreenNavigation("locations", "Ubicaciones")
 }
+
