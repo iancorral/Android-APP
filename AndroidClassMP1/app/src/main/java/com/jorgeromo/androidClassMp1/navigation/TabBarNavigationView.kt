@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import androidx.navigation.compose.rememberNavController
@@ -15,18 +14,17 @@ import com.jorgeromo.androidClassMp1.firstpartial.FirstPartialView
 import com.jorgeromo.androidClassMp1.ids.imc.views.IMCView
 import com.jorgeromo.androidClassMp1.ids.IdsView
 import com.jorgeromo.androidClassMp1.ids.location.views.LocationListScreen
-import com.jorgeromo.androidClassMp1.ids.login.views.LoginView
+import com.jorgeromo.androidClassMp1.firstpartial.login.views.LoginView
 import com.jorgeromo.androidClassMp1.ids.student.views.StudentView
 import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
-import com.jorgeromo.androidClassMp1.firstpartial.login.views.LoginView
+import androidx.compose.ui.graphics.Color
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TabBarNavigationView(navController: NavHostController = rememberNavController()) {
-
-    // Solo los tabs principales se muestran en la barra inferior
     val items = listOf(
         ScreenNavigation.Ids,
         ScreenNavigation.FirstPartial,
@@ -34,6 +32,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
         ScreenNavigation.ThirdPartial
     )
 
+    // Mapa de títulos por ruta (incluye tabs y pantallas internas)
     val routeTitles = remember {
         mapOf(
             ScreenNavigation.Ids.route to ScreenNavigation.Ids.label,
@@ -41,7 +40,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             ScreenNavigation.SecondPartial.route to ScreenNavigation.SecondPartial.label,
             ScreenNavigation.ThirdPartial.route to ScreenNavigation.ThirdPartial.label,
 
-            // Rutas internas
+            // Rutas internas (ajusta a tus strings preferidos)
             ScreenNavigation.IMC.route to "IMC",
             ScreenNavigation.Login.route to "Login",
             ScreenNavigation.Sum.route to "Suma",
@@ -52,15 +51,16 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
     }
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
+    // Si usas nested graphs, puedes leer la jerarquía; aquí basta con la route actual:
     val currentRoute = navBackStackEntry?.destination?.route
     val currentTitle = routeTitles[currentRoute] ?: ""
 
     Scaffold(
         topBar = {
+            // Puedes usar SmallTopAppBar o CenterAlignedTopAppBar
             CenterAlignedTopAppBar(
                 title = { Text(text = "Android Ian Corral 12130") },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color(0xFF4CAF50),
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color(0xFF00CED1), // Azul
                     titleContentColor = Color.White
                 )
             )
@@ -69,33 +69,31 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             NavigationBar {
                 items.forEach { screen ->
                     val selected = currentRoute == screen.route
-                    screen.icon?.let { icon ->  // <- solo dibuja si tiene icon
-                        NavigationBarItem(
-                            icon = { Icon(icon, contentDescription = screen.label) },
-                            label = { Text(screen.label) },
-                            selected = selected,
-                            onClick = {
-                                if (!selected) {
-                                    navController.navigate(screen.route) {
-                                        popUpTo(navController.graph.startDestinationId) { saveState = true }
-                                        launchSingleTop = true
-                                        restoreState = true
+                    NavigationBarItem(
+                        icon = { Icon(screen.icon, contentDescription = screen.label) },
+                        label = { Text(screen.label) },
+                        selected = selected,
+                        onClick = {
+                            if (!selected) {
+                                navController.navigate(screen.route) {
+                                    popUpTo(navController.graph.startDestinationId) {
+                                        saveState = true
                                     }
+                                    launchSingleTop = true
+                                    restoreState = true
                                 }
                             }
-                        )
-                    }
+                        }
+                    )
                 }
             }
         }
     ) { innerPadding ->
-
         NavHost(
             navController = navController,
             startDestination = ScreenNavigation.Ids.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            // Tabs principales
             composable(ScreenNavigation.Ids.route) { IdsView(navController) }
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView() }
@@ -103,7 +101,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
 
             // Rutas internas
             composable(ScreenNavigation.IMC.route) { IMCView() }
-            composable(ScreenNavigation.Login.route) { LoginView(navController) }
+            composable(ScreenNavigation.Login.route) { LoginView() }
             composable(ScreenNavigation.Sum.route) { SumView() }
             composable(ScreenNavigation.Temperature.route) { TempView() }
             composable(ScreenNavigation.StudentList.route) { StudentView() }
