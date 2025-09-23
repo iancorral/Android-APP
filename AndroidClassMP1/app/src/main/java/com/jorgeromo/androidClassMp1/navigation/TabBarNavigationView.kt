@@ -14,12 +14,14 @@ import com.jorgeromo.androidClassMp1.firstpartial.FirstPartialView
 import com.jorgeromo.androidClassMp1.ids.imc.views.IMCView
 import com.jorgeromo.androidClassMp1.ids.IdsView
 import com.jorgeromo.androidClassMp1.ids.location.views.LocationListScreen
-import com.jorgeromo.androidClassMp1.ids.login.views.LoginView
+import com.jorgeromo.androidClassMp1.firstpartial.login.views.LoginView
 import com.jorgeromo.androidClassMp1.ids.student.views.StudentView
 import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 import androidx.compose.ui.graphics.Color
+import com.jorgeromo.androidClassMp1.firstpartial.login.views.HomeView
+import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -60,9 +62,9 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             // Puedes usar SmallTopAppBar o CenterAlignedTopAppBar
             CenterAlignedTopAppBar(
                 title = { Text(text = "Android Ian Corral 12130") },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color(0xFF4CAF50), // Azul
-                titleContentColor = Color.White
-            )
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = Color(0xFF00CED1), // Azul
+                    titleContentColor = Color.White
+                )
             )
         },
         bottomBar = {
@@ -95,17 +97,19 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(ScreenNavigation.Ids.route) { IdsView(navController) }
-            composable(ScreenNavigation.FirstPartial.route) { FirstPartialView() }
+            composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
             composable(ScreenNavigation.SecondPartial.route) { SecondPartialView() }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }
 
             // Rutas internas
             composable(ScreenNavigation.IMC.route) { IMCView() }
-            composable(ScreenNavigation.Login.route) { LoginView() }
+            composable(ScreenNavigation.Login.route) { LoginView(navHostController = navController) }
             composable(ScreenNavigation.Sum.route) { SumView() }
             composable(ScreenNavigation.Temperature.route) { TempView() }
             composable(ScreenNavigation.StudentList.route) { StudentView() }
             composable(ScreenNavigation.Locations.route) { LocationListScreen() }
+            composable(ScreenNavigation.LottieAnimation.route) { LottieAnimationView() }
+            composable(ScreenNavigation.Home.route) { HomeView() }
         }
     }
 }
