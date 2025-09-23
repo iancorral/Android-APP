@@ -1,27 +1,37 @@
 package com.jorgeromo.androidClassMp1.navigation
 
-import SecondPartialView
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.*
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.*
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.jorgeromo.androidClassMp1.firstpartial.FirstPartialView
-import com.jorgeromo.androidClassMp1.ids.imc.views.IMCView
-import com.jorgeromo.androidClassMp1.ids.IdsView
-import com.jorgeromo.androidClassMp1.ids.location.views.LocationListScreen
+import com.jorgeromo.androidClassMp1.firstpartial.login.views.HomeView
 import com.jorgeromo.androidClassMp1.firstpartial.login.views.LoginView
+import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
+import com.jorgeromo.androidClassMp1.ids.IdsView
+import com.jorgeromo.androidClassMp1.ids.imc.views.IMCView
+import com.jorgeromo.androidClassMp1.ids.location.views.LocationListScreen
 import com.jorgeromo.androidClassMp1.ids.student.views.StudentView
 import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
+import com.jorgeromo.androidClassMp1.secondpartial.SecondPartialView
+import com.jorgeromo.androidClassMp1.secondpartial.qrcode.views.QrCodeView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
-import androidx.compose.ui.graphics.Color
-import com.jorgeromo.androidClassMp1.firstpartial.login.views.HomeView
-import com.jorgeromo.androidClassMp1.firstpartial.lottieanimation.LottieAnimationView
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,7 +108,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
         ) {
             composable(ScreenNavigation.Ids.route) { IdsView(navController) }
             composable(ScreenNavigation.FirstPartial.route) { FirstPartialView(navController) }
-            composable(ScreenNavigation.SecondPartial.route) { SecondPartialView() }
+            composable(ScreenNavigation.SecondPartial.route) { SecondPartialView(navController) }
             composable(ScreenNavigation.ThirdPartial.route) { ThirdPartialView(navController) }
 
             // Rutas internas
@@ -110,6 +120,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             composable(ScreenNavigation.Locations.route) { LocationListScreen() }
             composable(ScreenNavigation.LottieAnimation.route) { LottieAnimationView() }
             composable(ScreenNavigation.Home.route) { HomeView() }
+            composable(ScreenNavigation.QrCode.route) { QrCodeView() }
         }
     }
 }
