@@ -44,11 +44,15 @@ class LoginViewModel(private val repo: AuthRepository) : ViewModel() {
     private val _toastEvents = Channel<String>(Channel.BUFFERED)
     val toastEvents = _toastEvents.receiveAsFlow()
 
-    /*
-     onEmailChange / onPasswordChange
-     - Se llaman desde la vista cada vez que el usuario escribe.
-     - Actualizan el estado de la UI con el nuevo valor.
-    */
+
+    sealed interface LoginNavEvent {
+        data object GoHome : LoginNavEvent
+    }
+    private val _navEvents = Channel<LoginNavEvent>(Channel.BUFFERED)
+    val navEvents = _navEvents.receiveAsFlow()
+
+
+
     fun onEmailChange(v: String) { _ui.value = _ui.value.copy(email = v) }
     fun onPasswordChange(v: String) { _ui.value = _ui.value.copy(password = v) }
 
@@ -79,6 +83,7 @@ class LoginViewModel(private val repo: AuthRepository) : ViewModel() {
                 val res = repo.login(email, password)
                 if (res.success) {
                     _toastEvents.send("Login exitoso. Bienvenido ${res.user?.name ?: ""}")
+                    _navEvents.send(LoginNavEvent.GoHome)
                 } else {
                     _toastEvents.send(res.message.ifBlank { "Login fallido" })
                 }

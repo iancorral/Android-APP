@@ -1,6 +1,5 @@
 package com.jorgeromo.androidClassMp1.firstpartial.login.views
 
-import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -24,75 +23,65 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import com.jorgeromo.androidClassMp1.R
 import com.jorgeromo.androidClassMp1.firstpartial.login.model.network.RetrofitProvider
 import com.jorgeromo.androidClassMp1.firstpartial.login.model.repository.AuthRepository
 import com.jorgeromo.androidClassMp1.firstpartial.login.viewmodel.LoginViewModel
+import com.jorgeromo.androidClassMp1.firstpartial.login.viewmodel.LoginViewModel.LoginNavEvent
 import com.jorgeromo.androidClassMp1.firstpartial.login.viewmodel.LoginViewModelFactory
-import com.jorgeromo.androidClassMp1.ui.theme.AndroidClassMP1Theme
+import com.jorgeromo.androidClassMp1.navigation.ScreenNavigation
 import kotlinx.coroutines.flow.collectLatest
 
-/*
- LoginView
-
- Pantalla de UI construida con Jetpack Compose que muestra
- el formulario de inicio de sesión.
-
- Responsabilidades:
- - Mostrar los campos de email y password.
- - Mostrar botones de login y Face ID.
- - Escuchar cambios en el estado (LoginUiState) y redibujar la UI.
- - Mostrar mensajes de Toast y Snackbar basados en eventos
-   emitidos por el ViewModel.
-*/
 @Composable
-fun LoginView() {
-    // Inyección simple del repositorio y el ViewModel
+fun LoginView(navHostController: NavHostController) {
+    // Contexto para Toast
+    val context = LocalContext.current.applicationContext
+
+    // Repositorio y ViewModel
     val repo = remember { AuthRepository(RetrofitProvider.authApi) }
     val vm: LoginViewModel = viewModel(factory = LoginViewModelFactory(repo))
     val ui by vm.ui.collectAsState()
 
-    val appContext = LocalContext.current.applicationContext
     val snackbarHostState = remember { SnackbarHostState() }
     var passwordVisible by remember { mutableStateOf(false) }
 
-    /*
-     showToastSafe(text)
-     Función auxiliar que asegura que el Toast
-     siempre se ejecute en el hilo principal,
-     evitando errores en algunos emuladores.
-    */
+    // Función segura para mostrar Toast
     fun showToastSafe(text: String) {
         if (Looper.myLooper() == Looper.getMainLooper()) {
-            Toast.makeText(appContext, text, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
         } else {
-            Handler(Looper.getMainLooper()).post {
-                Toast.makeText(appContext, text, Toast.LENGTH_SHORT).show()
+            androidx.core.os.HandlerCompat.createAsync(Looper.getMainLooper()).post {
+                Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    /*
-     LaunchedEffect(vm)
-     Escucha los eventos de toastEvents emitidos por el ViewModel.
-     - Muestra un Toast con el mensaje recibido.
-     - También muestra un Snackbar integrado a la UI.
-    */
+    // Escuchar eventos de Toast
     LaunchedEffect(vm) {
         vm.toastEvents.collectLatest { msg ->
             showToastSafe(msg)
-            snackbarHostState.showSnackbar(message = msg)
+            snackbarHostState.showSnackbar(msg)
         }
     }
 
-    /*
-     Scaffold
-     Contenedor de Material 3 que provee un layout base
-     con soporte para SnackbarHost.
-    */
+    // Escuchar eventos de navegación
+    LaunchedEffect(Unit) {
+        vm.navEvents.collectLatest { event ->
+            when (event) {
+                is LoginNavEvent.GoHome -> {
+                    navHostController.navigate(ScreenNavigation.Home.route) {
+                        popUpTo(ScreenNavigation.Login.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            }
+        }
+    }
+
+    // UI principal
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { padding ->
@@ -104,10 +93,10 @@ fun LoginView() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            // Logo institucional
+            // Logo
             Image(
                 painter = painterResource(id = R.drawable.ulsalogo),
-                contentDescription = "ULSA logo",
+                contentDescription = "ULSA Logo",
                 modifier = Modifier
                     .size(150.dp)
                     .clip(CircleShape)
@@ -115,7 +104,7 @@ fun LoginView() {
 
             Spacer(Modifier.height(16.dp))
 
-            // Campo de email
+            // Email
             OutlinedTextField(
                 value = ui.email,
                 onValueChange = vm::onEmailChange,
@@ -130,7 +119,7 @@ fun LoginView() {
 
             Spacer(Modifier.height(8.dp))
 
-            // Campo de password con botón para mostrar/ocultar
+            // Password
             OutlinedTextField(
                 value = ui.password,
                 onValueChange = vm::onPasswordChange,
@@ -155,7 +144,7 @@ fun LoginView() {
 
             Spacer(Modifier.height(16.dp))
 
-            // Botón de login
+            // Botón Login
             Button(
                 onClick = { vm.login() },
                 enabled = !ui.isLoading,
@@ -172,9 +161,9 @@ fun LoginView() {
 
             Spacer(Modifier.height(12.dp))
 
-            // Botón de Face ID (placeholder, aún no implementado)
+            // Botón Face ID (placeholder)
             OutlinedButton(
-                onClick = { /* TODO: BiometricPrompt flow */ },
+                onClick = { /* TODO: BiometricPrompt */ },
                 enabled = !ui.isLoading,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -189,22 +178,10 @@ fun LoginView() {
 
             Spacer(Modifier.height(20.dp))
 
-            // Botón para probar que los Toasts funcionan en emulador
+            // Probar Toast
             TextButton(onClick = { showToastSafe("Prueba de Toast 👋") }) {
                 Text("Probar toast")
             }
         }
     }
-}
-
-/*
- LoginViewPreview
-
- Previsualización de la pantalla en Android Studio.
- No ejecuta lógica real de login, solo dibuja la UI.
-*/
-@Preview(showBackground = true)
-@Composable
-fun LoginViewPreview() {
-    AndroidClassMP1Theme { LoginView() }
 }

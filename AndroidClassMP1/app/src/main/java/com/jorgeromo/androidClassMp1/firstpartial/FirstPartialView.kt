@@ -40,6 +40,11 @@ fun FirstPartialView(navController: NavHostController) {
         ) {
             Text("Animation")
         }
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { navController.navigate(ScreenNavigation.Home.route) }) {
+            Text("Ir a Home")
+        }
     }
 }
 
