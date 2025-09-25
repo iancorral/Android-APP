@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -27,10 +28,13 @@ fun SecondPartialView(navController: NavHostController) {
     ) {
         Text(
             text = "Segundo Parcial Moviles I",
+            style = MaterialTheme.typography.headlineMedium,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         Button(
             onClick = { navController.navigate(ScreenNavigation.QrCode.route) },
@@ -40,5 +44,11 @@ fun SecondPartialView(navController: NavHostController) {
         }
 
         Spacer(modifier = Modifier.height(16.dp))
+
+        Button(onClick = { navController.navigate(ScreenNavigation.Home2.route) },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Ir al Home con JSON")
+        }
     }
 }

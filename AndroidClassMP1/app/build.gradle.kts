@@ -102,4 +102,11 @@ dependencies {
     implementation("androidx.camera:camera-view:1.3.0")
     implementation("com.google.mlkit:barcode-scanning:17.0.3")
     implementation("com.google.mlkit:vision-common:17.3.0")
+
+    // Retrofit para networking
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+// Coil para cargar imágenes desde URL
+    implementation("io.coil-kt:coil-compose:2.5.0")
 }

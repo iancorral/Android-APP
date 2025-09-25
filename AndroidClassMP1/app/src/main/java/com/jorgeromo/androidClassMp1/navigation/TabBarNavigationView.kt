@@ -30,6 +30,7 @@ import com.jorgeromo.androidClassMp1.ids.student.views.StudentView
 import com.jorgeromo.androidClassMp1.ids.sum.views.SumView
 import com.jorgeromo.androidClassMp1.ids.temperature.views.TempView
 import com.jorgeromo.androidClassMp1.secondpartial.SecondPartialView
+import com.jorgeromo.androidClassMp1.secondpartial.home.views.HomeView2
 import com.jorgeromo.androidClassMp1.secondpartial.qrcode.views.QrCodeView
 import com.jorgeromo.androidClassMp1.thirdpartial.ThirdPartialView
 
@@ -121,6 +122,7 @@ fun TabBarNavigationView(navController: NavHostController = rememberNavControlle
             composable(ScreenNavigation.LottieAnimation.route) { LottieAnimationView() }
             composable(ScreenNavigation.Home.route) { HomeView() }
             composable(ScreenNavigation.QrCode.route) { QrCodeView() }
+            composable(ScreenNavigation.Home2.route) { HomeView2() }
         }
     }
 }

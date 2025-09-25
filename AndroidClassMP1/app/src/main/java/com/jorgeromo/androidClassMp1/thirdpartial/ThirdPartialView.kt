@@ -1,6 +1,7 @@
 package com.jorgeromo.androidClassMp1.thirdpartial
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.sp
@@ -19,10 +20,12 @@ fun ThirdPartialView(navController: NavController) {
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Tercero Parcial Moviles I",
+            text = "Tercer Parcial Moviles I",
+            style = MaterialTheme.typography.headlineMedium,
             fontSize = 24.sp,
             textAlign = TextAlign.Center,
             modifier = Modifier.fillMaxWidth()
         )
+        Spacer(modifier = Modifier.height(24.dp))
     }
 }
