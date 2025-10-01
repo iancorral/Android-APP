@@ -11,7 +11,7 @@ private const val BASE_URL = "https://gist.githubusercontent.com"
 // Interface que define los endpoints
 interface ApiService {
     // Usamos @GET con la ruta específica de TU Gist
-    @GET("/iancorral/8068b8b9513c0f06e7a745c63cfd2787/raw/74b39a0cd366c24b127da723e80fb40eadc00127/HomeData.json")
+    @GET("/iancorral/8068b8b9513c0f06e7a745c63cfd2787/raw/1b4bee629a614058500936974f8717aea631e5dd/HomeData.json")
     suspend fun getHomeScreenData(): HomeScreenResponse
 }
 
