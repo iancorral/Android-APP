@@ -27,6 +27,7 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -34,8 +35,12 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.12"
     }
 }
 
@@ -111,4 +116,6 @@ dependencies {
 
 // Coil para cargar imágenes desde URL
     implementation("io.coil-kt:coil-compose:2.5.0")
+
+    implementation("com.google.android.gms:play-services-location:21.3.0")
 }
